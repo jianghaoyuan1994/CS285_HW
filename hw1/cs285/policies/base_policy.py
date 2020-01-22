@@ -1,9 +1,10 @@
 import numpy as np
 
+
 class BasePolicy(object):
 
     def __init__(self, **kwargs):
-       super(BasePolicy, self).__init__(**kwargs)
+        super(BasePolicy, self).__init__(**kwargs)
 
     def build_graph(self):
         raise NotImplementedError
@@ -15,7 +16,7 @@ class BasePolicy(object):
         raise NotImplementedError
 
     def save(self, filepath):
-    	raise NotImplementedError
+        raise NotImplementedError
 
     def restore(self, filepath):
-    	raise NotImplementedError
+        raise NotImplementedError
