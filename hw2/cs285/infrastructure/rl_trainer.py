@@ -141,7 +141,7 @@ class RL_Trainer(object):
 
     def collect_training_trajectories(self, itr, load_initial_expertdata, collect_policy, batch_size):
         # TODO: GETTHIS from HW1
-        if itr == 0 :
+        if itr == 0 and load_initial_expertdata:
             with open(load_initial_expertdata, 'rb') as f:
                 paths = pickle.load(f)
             return paths, 0, None
