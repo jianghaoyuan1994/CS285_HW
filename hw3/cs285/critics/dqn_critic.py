@@ -44,7 +44,7 @@ class DQNCritic(BaseCritic):
             # target Q-network. See page 5 of https://arxiv.org/pdf/1509.06461.pdf for more details.
             q_tp1_values_q = q_func(self.obs_tp1_ph, self.ac_dim, scope='q_func', reuse=False)
             act = tf.argmax(q_tp1_values_q, axis=1)
-            q_tp1 = tf.slice(q_tp1_values, act)
+            q_tp1 = q_tp1_values[act]
         else:
             # q values of the next timestep
             q_tp1 = tf.reduce_max(q_tp1_values, axis=1)
@@ -56,7 +56,7 @@ class DQNCritic(BaseCritic):
             #currentReward + self.gamma * qValuesOfNextTimestep * (1 - self.done_mask_ph)
         # HINT2: see above, where q_tp1 is defined as the q values of the next timestep
         # HINT3: see the defined placeholders and look for the one that holds current rewards
-        target_q_t = self.rew_t_ph + self.gamma * q_tp1 * (1 - self.done_mask_p)
+        target_q_t = self.rew_t_ph + self.gamma * q_tp1 * (1 - self.done_mask_ph)
         target_q_t = tf.stop_gradient(target_q_t)
 
         #####################
