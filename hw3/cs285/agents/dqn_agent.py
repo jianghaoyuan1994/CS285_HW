@@ -56,8 +56,10 @@ class DQNAgent(object):
         # HINT: take random action 
             # with probability eps (see np.random.random())
             # OR if your current step number (see self.t) is less that self.learning_starts
-        perform_random_action = True if np.random.random() <= eps or \
-                                        self.replay_buffer<self.learning_starts else False
+        if np.random.random() <= eps or self.t < self.learning_starts:
+            perform_random_action = True
+        else:
+            perform_random_action = False
 
         if perform_random_action:
             action = np.random.choice(self.num_actions,1)
