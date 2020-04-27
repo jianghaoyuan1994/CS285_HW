@@ -72,8 +72,8 @@ class DQNCritic(BaseCritic):
         # variables of the Q-function network and target network, respectively
         # HINT1: see the "scope" under which the variables were constructed in the lines at the top of this function
         # HINT2: use tf.get_collection to look for all variables under a certain scope
-        q_func_vars = tf.get_collection('q_func')
-        target_q_func_vars = tf.get_collection('target_q_func')
+        q_func_vars = tf.get_collection(tf.GraphKeys.VARIABLES, 'q_func')
+        target_q_func_vars = tf.get_collection(tf.GraphKeys.VARIABLES, 'target_q_func')
 
         #####################
 
