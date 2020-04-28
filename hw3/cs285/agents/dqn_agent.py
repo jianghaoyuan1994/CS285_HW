@@ -62,7 +62,7 @@ class DQNAgent(object):
             perform_random_action = False
 
         if perform_random_action:
-            action = np.random.choice(self.num_actions, 1)
+            action = np.random.randint(self.num_actions)
         else:
             # TODO query the policy to select action
             # HINT: you cannot use "self.last_obs" directly as input
