@@ -64,7 +64,7 @@ class DQNCritic(BaseCritic):
         # TODO compute the Bellman error (i.e. TD error between q_t and target_q_t)
         # Note that this scalar-valued tensor later gets passed into the optimizer, to be minimized
         # HINT: use reduce mean of huber_loss (from infrastructure/dqn_utils.py) instead of squared error
-        self.total_error = huber_loss(self.q_t-target_q_t)
+        self.total_error = tf.reduce_mean(huber_loss(self.q_t-target_q_t))
 
         #####################
 

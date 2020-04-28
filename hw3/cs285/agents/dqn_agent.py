@@ -126,7 +126,7 @@ class DQNAgent(object):
 
             # TODO: create a LIST of tensors to run in order to 
             # train the critic as well as get the resulting total_error
-            tensors_to_run = self.critic.total_error
+            tensors_to_run = [self.critic.total_error]
             loss, _ = self.sess.run(tensors_to_run, feed_dict=feed_dict)
             # Note: remember that the critic's total_error value is what you
             # created to compute the Bellman error in a batch, 
