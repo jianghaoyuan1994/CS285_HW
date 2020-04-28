@@ -62,7 +62,7 @@ class DQNAgent(object):
             perform_random_action = False
 
         if perform_random_action:
-            action = np.random.choice(self.num_actions,1)
+            action = np.random.choice(self.num_actions, 1)
         else:
             # TODO query the policy to select action
             # HINT: you cannot use "self.last_obs" directly as input
@@ -93,7 +93,8 @@ class DQNAgent(object):
 
         # TODO if taking this step resulted in done, reset the env (and the latest observation)
         if done:
-            self.env.reset()
+            obs = self.env.reset()
+            self.last_obs = obs
 
     def sample(self, batch_size):
         if self.replay_buffer.can_sample(self.batch_size):
@@ -126,7 +127,7 @@ class DQNAgent(object):
 
             # TODO: create a LIST of tensors to run in order to 
             # train the critic as well as get the resulting total_error
-            tensors_to_run = [self.critic.total_error]
+            tensors_to_run = [self.critic.total_error, self.critic.train_fn]
             loss, _ = self.sess.run(tensors_to_run, feed_dict=feed_dict)
             # Note: remember that the critic's total_error value is what you
             # created to compute the Bellman error in a batch, 

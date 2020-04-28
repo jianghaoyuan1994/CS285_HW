@@ -32,15 +32,15 @@ class Q_Trainer(object):
     def run_training_loop(self):
         self.rl_trainer.run_training_loop(
             self.agent_params['num_timesteps'],
-            collect_policy = self.rl_trainer.agent.actor,
-            eval_policy = self.rl_trainer.agent.actor,
-            )
+            collect_policy=self.rl_trainer.agent.actor,
+            eval_policy=self.rl_trainer.agent.actor,
+        )
+
 
 def main():
-
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--env_name',  default='PongNoFrameskip-v4',
+    parser.add_argument('--env_name', default='PongNoFrameskip-v4',
                         choices=('PongNoFrameskip-v4',
                                  'LunarLander-v2')
                         )
@@ -66,7 +66,7 @@ def main():
 
     # convert to dictionary
     params = vars(args)
-    params['video_log_freq'] = -1 # This param is not used for DQN
+    params['video_log_freq'] = -1  # This param is not used for DQN
     ##################################
     ### CREATE DIRECTORY FOR LOGGING
     ##################################
@@ -83,7 +83,7 @@ def main():
     logdir = logdir_prefix + args.exp_name + '_' + args.env_name + '_' + time.strftime("%d-%m-%Y_%H-%M-%S")
     logdir = os.path.join(data_path, logdir)
     params['logdir'] = logdir
-    if not(os.path.exists(logdir)):
+    if not (os.path.exists(logdir)):
         os.makedirs(logdir)
 
     print("\n\n\nLOGGING TO: ", logdir, "\n\n\n")

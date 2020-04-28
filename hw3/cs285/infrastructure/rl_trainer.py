@@ -18,7 +18,7 @@ from cs285.infrastructure.dqn_utils import get_wrapper_by_name
 
 # how many rollouts to save as videos to tensorboard
 MAX_NVIDEO = 2
-MAX_VIDEO_LEN = 40 # we overwrite this in the code below
+MAX_VIDEO_LEN = 40  # we overwrite this in the code below
 
 
 class RL_Trainer(object):
@@ -73,12 +73,11 @@ class RL_Trainer(object):
 
         # simulation timestep, will be used for video saving
         if 'model' in dir(self.env):
-            self.fps = 1/self.env.model.opt.timestep
+            self.fps = 1 / self.env.model.opt.timestep
         elif 'env_wrappers' in self.params:
-            self.fps = 30 # This is not actually used when using the Monitor wrapper
+            self.fps = 30  # This is not actually used when using the Monitor wrapper
         else:
             self.fps = self.env.env.metadata['video.frames_per_second']
-
 
         #############
         ## AGENT
@@ -92,7 +91,6 @@ class RL_Trainer(object):
         #############
 
         tf.global_variables_initializer().run(session=self.sess)
-
 
     def run_training_loop(self, n_iter, collect_policy, eval_policy,
                           initial_expertdata=None, relabel_with_expert=False,
@@ -112,7 +110,7 @@ class RL_Trainer(object):
         self.start_time = time.time()
 
         for itr in range(n_iter):
-            #print("\n\n********** Iteration %i ************"%itr)
+            # print("\n\n********** Iteration %i ************"%itr)
 
             # decide if videos should be rendered/logged at this iteration
             if itr % self.params['video_log_freq'] == 0 and self.params['video_log_freq'] != -1:
@@ -136,12 +134,16 @@ class RL_Trainer(object):
                 train_video_paths = None
                 paths = None
             else:
-                paths, envsteps_this_batch, train_video_paths = self.collect_training_trajectories(itr, initial_expertdata, collect_policy, self.params['batch_size'])
+                paths, envsteps_this_batch, train_video_paths = self.collect_training_trajectories(itr,
+                                                                                                   initial_expertdata,
+                                                                                                   collect_policy,
+                                                                                                   self.params[
+                                                                                                       'batch_size'])
 
             self.total_envsteps += envsteps_this_batch
 
             # relabel the collected obs with actions from a provided expert policy
-            if relabel_with_expert and itr>=start_relabel_with_expert:
+            if relabel_with_expert and itr >= start_relabel_with_expert:
                 paths = self.do_relabel_with_expert(expert_policy, paths)
 
             # add collected data to replay buffer
@@ -159,12 +161,11 @@ class RL_Trainer(object):
                 else:
                     self.perform_logging(itr, paths, eval_policy, train_video_paths, loss)
 
-
                 # save policy
                 if self.params['save_params']:
                     print('\nSaving agent\'s actor...')
-                    self.agent.actor.save(self.params['logdir'] + '/policy_itr_'+str(itr))
-                    self.agent.critic.save(self.params['logdir'] + '/critic_itr_'+str(itr))
+                    self.agent.actor.save(self.params['logdir'] + '/policy_itr_' + str(itr))
+                    self.agent.critic.save(self.params['logdir'] + '/critic_itr_' + str(itr))
 
     ####################################
     ####################################
@@ -177,14 +178,14 @@ class RL_Trainer(object):
         print("\nCollecting data to be used for training...")
         paths, envsteps_this_batch = sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
         train_video_paths = None
-        if self.log_video:
+        if self.logvideo:
             print('\nCollecting train rollouts to be used for saving videos...')
             train_video_paths = sample_n_trajectories(self.env, collect_policy, MAX_NVIDEO, MAX_VIDEO_LEN, True)
 
         return paths, envsteps_this_batch, train_video_paths
 
     def train_agent(self):
-        print('\nTraining agent using sampled data from replay buffer...')
+        # print('\nTraining agent using sampled data from replay buffer...')
         for train_step in range(self.params['num_agent_train_steps_per_iter']):
             # HINT1: use the agent's sample function
             # HINT2: how much data = self.params['train_batch_size']
@@ -193,7 +194,8 @@ class RL_Trainer(object):
 
             # HINT: use the agent's train function
             # HINT: print or plot the loss for debugging!
-            self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
+            loss = self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
+        return loss
 
     def do_relabel_with_expert(self, expert_policy, paths):
         print("\nRelabelling collected observations with labels from an expert policy...")
@@ -244,19 +246,21 @@ class RL_Trainer(object):
 
         # collect eval trajectories, for logging
         print("\nCollecting data for eval...")
-        eval_paths, eval_envsteps_this_batch = sample_trajectories(self.env, eval_policy, self.params['eval_batch_size'], self.params['ep_len'])
+        eval_paths, eval_envsteps_this_batch = sample_trajectories(self.env, eval_policy,
+                                                                   self.params['eval_batch_size'],
+                                                                   self.params['ep_len'])
 
         # save eval rollouts as videos in tensorboard event file
         if self.logvideo and train_video_paths != None:
             print('\nCollecting video rollouts eval')
             eval_video_paths = sample_n_trajectories(self.env, eval_policy, MAX_NVIDEO, MAX_VIDEO_LEN, True)
 
-            #save train/eval videos
+            # save train/eval videos
             print('\nSaving train rollouts as videos...')
             self.logger.log_paths_as_videos(train_video_paths, itr, fps=self.fps, max_videos_to_save=MAX_NVIDEO,
                                             video_title='train_rollouts')
-            self.logger.log_paths_as_videos(eval_video_paths, itr, fps=self.fps,max_videos_to_save=MAX_NVIDEO,
-                                             video_title='eval_rollouts')
+            self.logger.log_paths_as_videos(eval_video_paths, itr, fps=self.fps, max_videos_to_save=MAX_NVIDEO,
+                                            video_title='eval_rollouts')
 
         # save eval metrics
         if self.logmetrics:
