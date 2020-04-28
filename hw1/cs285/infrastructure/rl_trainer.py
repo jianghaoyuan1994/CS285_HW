@@ -121,7 +121,7 @@ class RL_Trainer(object):
             self.agent.add_to_replay_buffer(paths)
 
             # train agent (using sampled data from replay buffer)
-            self.train_agent() ## TODO implement this function below
+            loss = self.train_agent() ## TODO implement this function below
 
             # log/save
             if self.log_video or self.log_metrics:
@@ -191,7 +191,8 @@ class RL_Trainer(object):
             # TODO use the sampled data for training
             # HINT: use the agent's train function
             # HINT: print or plot the loss for debugging!
-            self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
+            loss = self.agent.train(ob_batch, ac_batch, re_batch, next_ob_batch, terminal_batch)
+        return loss
 
     def do_relabel_with_expert(self, expert_policy, paths):
         print("\nRelabelling collected observations with labels from an expert policy...")
