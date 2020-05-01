@@ -56,10 +56,7 @@ class DQNAgent(object):
         # HINT: take random action 
             # with probability eps (see np.random.random())
             # OR if your current step number (see self.t) is less that self.learning_starts
-        if np.random.random() <= eps or self.t < self.learning_starts:
-            perform_random_action = True
-        else:
-            perform_random_action = False
+        perform_random_action = np.random.random() < eps or self.t < self.learning_starts
 
         if perform_random_action:
             action = np.random.randint(self.num_actions)
@@ -93,8 +90,7 @@ class DQNAgent(object):
 
         # TODO if taking this step resulted in done, reset the env (and the latest observation)
         if done:
-            obs = self.env.reset()
-            self.last_obs = obs
+            self.last_obs = self.env.reset()
 
     def sample(self, batch_size):
         if self.replay_buffer.can_sample(self.batch_size):
@@ -137,7 +133,7 @@ class DQNAgent(object):
             # TODO: use sess.run to periodically update the critic's target function
             # HINT: see update_target_fn
             if self.num_param_updates % self.target_update_freq == 0:
-                self.sess.run(self.critic.update_target_fn)
+                _ = self.sess.run(self.critic.update_target_fn)
 
             self.num_param_updates += 1
 

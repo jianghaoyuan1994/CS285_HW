@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 class ArgMaxPolicy(object):
 
     def __init__(self, sess, critic):
@@ -9,7 +10,7 @@ class ArgMaxPolicy(object):
         # TODO: Define what action this policy should return
         # HINT1: the critic's q_t_values indicate the goodness of observations, 
         # so they should be used to decide the action to perform
-        self.action = tf.argmax(critic.q_t_values, axis=1)
+        self.action = tf.argmax(self.critic.q_t_values, axis=1)
 
     def get_action(self, obs):
 
