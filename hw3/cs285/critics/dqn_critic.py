@@ -43,7 +43,7 @@ class DQNCritic(BaseCritic):
             # In double Q-learning, the best action is selected using the Q-network that
             # is being updated, but the Q-value for this action is obtained from the
             # target Q-network. See page 5 of https://arxiv.org/pdf/1509.06461.pdf for more details.
-            q_tp1_values_q = q_func(self.obs_tp1_ph, self.ac_dim, scope='q_func', reuse=False)
+            q_tp1_values_q = q_func(self.obs_tp1_ph, self.ac_dim, scope='q_func', reuse=True)
             # idx = tf.argmax(q_tp1_values_q, axis=1)
             idx = tf.stack(
                 [tf.range(tf.shape(self.obs_t_ph)[0]), tf.cast(tf.argmax(q_tp1_values_q, axis=1), tf.int32)],

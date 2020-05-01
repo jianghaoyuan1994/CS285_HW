@@ -171,7 +171,26 @@ class RL_Trainer(object):
     ####################################
 
     def collect_training_trajectories(self, itr, load_initial_expertdata, collect_policy, batch_size):
+        """
+        :param itr:
+        :param load_initial_expertdata:  path to expert data pkl file
+        :param collect_policy:  the current policy using which we collect data
+        :param batch_size:  the number of transitions we collect
+        :return:
+            paths: a list trajectories
+            envsteps_this_batch: the sum over the numbers of environment steps in paths
+            train_video_paths: paths which also contain videos for visualization purposes
+         """
+
+        # TODO decide whether to load training data or use
+        # HINT: depending on if it's the first iteration or not,
+        # decide whether to either
+        # load the data. In this case you can directly return as follows
+        # ``` return loaded_paths, 0, None ```
+
+        # collect data, batch_size is the number of transitions you want to collect.
         if itr == 0 and load_initial_expertdata:
+            print(load_initial_expertdata)
             with open(load_initial_expertdata, 'rb') as f:
                 paths = pickle.load(f)
             return paths, 0, None
