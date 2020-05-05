@@ -2,16 +2,16 @@ import os
 import gym
 import pdb
 import time
-import numpy as np 
-import tensorflow as tf 
+import numpy as np
+import tensorflow as tf
 
 from cs285.infrastructure.rl_trainer import RL_Trainer
 from cs285.agents.ac_agent import ACAgent
 
+
 class AC_Trainer(object):
 
     def __init__(self, params):
-    
         #####################
         ## SET AGENT PARAMS
         #####################
@@ -22,11 +22,11 @@ class AC_Trainer(object):
             'learning_rate': params['learning_rate'],
             'num_target_updates': params['num_target_updates'],
             'num_grad_steps_per_target_update': params['num_grad_steps_per_target_update'],
-            }
+        }
 
         estimate_advantage_args = {
             'gamma': params['discount'],
-            'standardize_advantages': not(params['dont_standardize_advantages']),
+            'standardize_advantages': not (params['dont_standardize_advantages']),
         }
 
         train_args = {
@@ -49,16 +49,14 @@ class AC_Trainer(object):
         self.rl_trainer = RL_Trainer(self.params)
 
     def run_training_loop(self):
-
         self.rl_trainer.run_training_loop(
-            self.params['n_iter'], 
-            collect_policy = self.rl_trainer.agent.actor,
-            eval_policy = self.rl_trainer.agent.actor,
-            )
+            self.params['n_iter'],
+            collect_policy=self.rl_trainer.agent.actor,
+            eval_policy=self.rl_trainer.agent.actor,
+        )
 
 
 def main():
-
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--env_name', type=str)
@@ -70,9 +68,9 @@ def main():
     parser.add_argument('--num_critic_updates_per_agent_update', type=int, default=1)
     parser.add_argument('--num_actor_updates_per_agent_update', type=int, default=1)
 
-    parser.add_argument('--batch_size', '-b', type=int, default=1000) #steps collected per train iteration
-    parser.add_argument('--eval_batch_size', '-eb', type=int, default=400) #steps collected per eval iteration
-    parser.add_argument('--train_batch_size', '-tb', type=int, default=1000) ##steps used per gradient step
+    parser.add_argument('--batch_size', '-b', type=int, default=1000)  # steps collected per train iteration
+    parser.add_argument('--eval_batch_size', '-eb', type=int, default=400)  # steps collected per eval iteration
+    parser.add_argument('--train_batch_size', '-tb', type=int, default=1000)  ##steps used per gradient step
 
     parser.add_argument('--discount', type=float, default=1.0)
     parser.add_argument('--learning_rate', '-lr', type=float, default=5e-3)
@@ -85,12 +83,12 @@ def main():
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--use_gpu', '-gpu', action='store_true')
     parser.add_argument('--which_gpu', '-gpu_id', default=0)
-    parser.add_argument('--video_log_freq', type=int, default=-1) 
+    parser.add_argument('--video_log_freq', type=int, default=-1)
     parser.add_argument('--scalar_log_freq', type=int, default=10)
 
     parser.add_argument('--save_params', action='store_true')
 
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     # convert to dictionary
     params = vars(args)
@@ -114,7 +112,7 @@ def main():
     logdir = logdir_prefix + args.exp_name + '_' + args.env_name + '_' + time.strftime("%d-%m-%Y_%H-%M-%S")
     logdir = os.path.join(data_path, logdir)
     params['logdir'] = logdir
-    if not(os.path.exists(logdir)):
+    if not (os.path.exists(logdir)):
         os.makedirs(logdir)
 
     print("\n\n\nLOGGING TO: ", logdir, "\n\n\n")

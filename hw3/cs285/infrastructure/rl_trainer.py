@@ -194,7 +194,7 @@ class RL_Trainer(object):
             with open(load_initial_expertdata, 'rb') as f:
                 paths = pickle.load(f)
             return paths, 0, None
-        print("\nCollecting data to be used for training...")
+        # print("\nCollecting data to be used for training...")
         paths, envsteps_this_batch = sample_trajectories(self.env, collect_policy, batch_size, self.params['ep_len'])
         train_video_paths = None
         if self.logvideo:
