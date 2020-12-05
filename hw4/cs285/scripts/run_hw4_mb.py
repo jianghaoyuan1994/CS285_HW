@@ -45,8 +45,8 @@ class MB_Trainer(object):
 
         self.rl_trainer.run_training_loop(
             self.params['n_iter'], 
-            collect_policy = self.rl_trainer.agent.actor,
-            eval_policy = self.rl_trainer.agent.actor,
+            collect_policy=self.rl_trainer.agent.actor,
+            eval_policy=self.rl_trainer.agent.actor,
             )
 
 
