@@ -55,9 +55,9 @@ class MPCPolicy(BasePolicy):
             cur_obs = np.tile(obs, [self.N, 1])
             cur_rwds = np.zeros(self.N)
             for t in range(self.horizon):
-                rwds, dones = self.env.get_reward(cur_obs, candidate_action_sequencesp[:, t, :])
+                rwds, dones = self.env.get_reward(cur_obs, candidate_action_sequences[:, t, :])
                 cur_rwds += rwds
-                cur_obs = model.get_prediction(cur_obs, candidate_action_sequencesp[:, t, :], self.data_statistics)
+                cur_obs = model.get_prediction(cur_obs, candidate_action_sequences[:, t, :], self.data_statistics)
             predicted_rewards_per_ens.append(cur_rwds)
             # TODO(Q2)
 
